@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TN-MediScan | Hacker Healthcare Command</title>
+
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+<body>
+
+<div id="hud">
+  <h1>🩺 TN-MEDISCAN</h1>
+  <p>Cyber Healthcare Command – Tamil Nadu</p>
+
+  <input id="locationInput" placeholder="Type location (Madurai)">
+  <button onclick="searchLocation()">SET LOCATION</button>
+
+  <button onclick="boot()">BOOT MAP</button>
+  <button onclick="lockGPS()">USE GPS</button>
+  <button onclick="scanNearby()">SCAN NEARBY</button>
+  <button onclick="window.location.href='tel:108'" style="background:red;color:white;">
+    🚑 EMERGENCY 108
+    </button>
+    
+  <div id="info"></div>
+
+  <div id="emergency">
+    🚑 Ambulance: <b>108</b><br>
+    ☎ Health: <b>104</b><br>
+    🚨 Emergency: <b>112</b>
+  </div>
+</div>
+
+<div id="map">
+  <div id="radar-container">
+    <div class="radar-sweep"></div>
+    <div class="radar-circle"></div>
+    <div id="blip-overlay"></div>
+    
+    <div class="radar-coords">
+        SYS: <span id="radar-status">SCANNING</span><br>
+        LOC: <span id="radar-pos">0.0, 0.0</span>
+    </div>
+</div>
+</div>
+
+
+<div id="detailsPanel" class="hidden">
+    <button onclick="closeDetails()">✖</button>
+    <div id="detailsContent"></div>
+  </div>
+  
+<div id="listPanel">
+  <h3>Nearby Hospitals & Pharmacies</h3>
+  <input 
+  type="text" 
+  id="listSearch" 
+  placeholder="Search hospital / pharmacy..." 
+  onkeyup="filterList()" 
+/>
+
+  <ul id="resultList"></ul>
+</div>
+
+<div id="scanlines"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

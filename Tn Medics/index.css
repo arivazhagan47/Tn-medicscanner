@@ -1,0 +1,334 @@
+/* =========================
+   GLOBAL RESET & FONTS
+   ========================= */
+   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+   * { margin:0; padding:0; box-sizing:border-box; }
+   
+   body { 
+       background: #020a06; 
+       color: #00ff99; 
+       font-family: 'Share Tech Mono', monospace; 
+       overflow: hidden;
+       text-transform: uppercase;
+   }
+   
+   /* =========================
+      MAP & OVERLAYS
+      ========================= */
+   #map { 
+       width:100vw; height:100vh; 
+       filter: sepia(100%) hue-rotate(110deg) brightness(0.6) contrast(1.2);
+   }
+   
+   /* Digital Grain/Noise Overlay */
+   body::before {
+       content: "";
+       position: fixed;
+       inset: 0;
+       background: url('https://grainy-gradients.vercel.app/noise.svg');
+       opacity: 0.05;
+       pointer-events: none;
+       z-index: 2000;
+   }
+   
+   /* Hexagonal Grid Overlay */
+   #map::after {
+       content: "";
+       position: absolute;
+       inset: 0;
+       background-image: radial-gradient(rgba(0, 255, 153, 0.1) 1px, transparent 1px);
+       background-size: 30px 30px;
+       pointer-events: none;
+       z-index: 500;
+   }
+   
+   /* =========================
+      FUTURISTIC HUD (Top Left)
+      ========================= */
+   #hud {
+       position: absolute;
+       top: 20px;
+       left: 20px;
+       width: 300px;
+       background: rgba(0, 20, 10, 0.7);
+       backdrop-filter: blur(10px);
+       border: 1px solid rgba(0, 255, 153, 0.5);
+       padding: 20px;
+       z-index: 1000;
+       clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%); /* Beveled corner */
+       box-shadow: 0 0 20px rgba(0, 255, 153, 0.2);
+   }
+   
+   #hud h1 { 
+       font-family: 'Orbitron', sans-serif;
+       font-size: 18px; 
+       letter-spacing: 2px;
+       margin-bottom: 10px;
+       border-bottom: 1px solid #00ff99;
+       padding-bottom: 5px;
+   }
+   
+   /* Modern Input Styling */
+   input, button {
+       background: rgba(0, 255, 153, 0.05);
+       border: 1px solid #00ff99;
+       color: #00ff99;
+       padding: 10px;
+       margin-top: 10px;
+       transition: all 0.3s ease;
+       outline: none;
+   }
+   
+   button {
+       font-weight: bold;
+       letter-spacing: 1px;
+       text-shadow: 0 0 5px #00ff99;
+   }
+   
+   button:hover {
+       background: #00ff99;
+       color: #020a06;
+       box-shadow: 0 0 15px #00ff99;
+   }
+   
+   /* =========================
+      DATA LIST (Right Panel)
+      ========================= */
+   #listPanel {
+       position: absolute;
+       right: 15px;
+       top: 15px;
+       bottom: 15px;
+       width: 320px;
+       background: rgba(0, 15, 5, 0.85);
+       border: 1px solid rgba(0, 255, 153, 0.3);
+       padding: 15px;
+       z-index: 1000;
+       box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+   }
+   
+   #listSearch {
+       border-radius: 0;
+       border-width: 0 0 2px 0;
+       background: transparent;
+   }
+   
+   #resultList li {
+       list-style: none;
+       margin-bottom: 8px;
+       padding: 12px;
+       background: rgba(0, 255, 153, 0.03);
+       border-right: 2px solid transparent;
+       transition: 0.3s;
+       position: relative;
+   }
+   
+   #resultList li:hover {
+       background: rgba(0, 255, 153, 0.1);
+       border-right: 4px solid #00ff99;
+       padding-left: 15px;
+   }
+   
+   /* Corner Bracket Accents */
+   #resultList li::before {
+       content: "";
+       position: absolute;
+       top: 0; left: 0;
+       width: 5px; height: 5px;
+       border-top: 1px solid #00ff99;
+       border-left: 1px solid #00ff99;
+   }
+   
+   /* =========================
+      RADAR & SCANLINES
+      ========================= */
+   #radar {
+       border: 1px solid rgba(0, 255, 153, 0.2);
+       background: radial-gradient(circle, rgba(0, 255, 153, 0.05) 0%, transparent 70%);
+   }
+   
+   #scanlines {
+       background: linear-gradient(
+           to bottom,
+           transparent 50%,
+           rgba(0, 255, 153, 0.05) 51%
+       );
+       background-size: 100% 4px;
+   }
+   /* =========================
+   RADAR POSITIONING
+   ========================= */
+#radar-container {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 200px;
+  height: 200px;
+  background: rgba(0, 40, 20, 0.4);
+  border: 2px solid rgba(0, 255, 153, 0.3);
+  border-radius: 50%;
+  z-index: 1500;
+  pointer-events: none;
+  box-shadow: 0 0 20px rgba(0, 255, 153, 0.1);
+}
+
+/* The Rotating Sweep */
+.radar-sweep {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(
+      from 0deg,
+      rgba(0, 255, 153, 0.6) 0deg,
+      rgba(0, 255, 153, 0.1) 60deg,
+      transparent 180deg
+  );
+  animation: rotate-radar 4s linear infinite;
+}
+
+/* Static Rings */
+.radar-circle {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(0, 255, 153, 0.15);
+  border-radius: 50%;
+}
+
+/* =========================
+ RADAR BLIPS (Targets)
+ ========================= */
+.blip {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #00ff99;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ff99;
+  opacity: 0;
+  animation: blip-flash 4s linear infinite;
+}
+
+/* =========================
+ ANIMATIONS
+ ========================= */
+@keyframes rotate-radar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blip-flash {
+  0% { opacity: 0; transform: scale(1); }
+  5% { opacity: 1; transform: scale(1.5); }
+  15% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; }
+}
+.radar-coords {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  color: #00ff99;
+  font-family: 'Share Tech Mono', monospace;
+  opacity: 0.7;
+}
+   /* =========================
+      GLITCH ANIMATION
+      ========================= */
+   @keyframes glitch {
+       0% { transform: translate(0); }
+       20% { transform: translate(-2px, 2px); }
+       40% { transform: translate(-2px, -2px); }
+       60% { transform: translate(2px, 2px); }
+       80% { transform: translate(2px, -2px); }
+       100% { transform: translate(0); }
+   }
+   
+   .glitch-text:hover {
+       animation: glitch 0.2s infinite;
+       text-shadow: 2px 0 red, -2px 0 blue;
+   }
+   
+   /* =========================
+      MOBILE OPTIMIZATION
+      ========================= */
+   @media (max-width: 768px) {
+       #hud { width: 95%; left: 2.5%; top: 10px; }
+       #listPanel { 
+           width: 100%; 
+           height: 40vh; 
+           right: 0; 
+           bottom: 0; 
+           top: auto; 
+       }
+   }
+   .blip {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #00ff99;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px #00ff99, 0 0 15px rgba(0, 255, 153, 0.5);
+    opacity: 0;
+    animation: blip-pulse 4s linear infinite;
+}
+
+/* Data tag next to blip */
+.blip::after {
+    content: "TRK_OBJ";
+    position: absolute;
+    left: 8px;
+    top: -5px;
+    font-size: 8px;
+    color: rgba(0, 255, 153, 0.6);
+    white-space: nowrap;
+}
+
+@keyframes blip-pulse {
+    0%, 45% { opacity: 0; }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.5); }
+    70% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; }
+}
+/* =========================
+   CUSTOM NEON SCROLLBAR
+   ========================= */
+
+/* Define the width of the scrollbar area */
+#listPanel::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* The background of the scrollbar (track) */
+#listPanel::-webkit-scrollbar-track {
+  background: rgba(0, 255, 153, 0.05);
+  border-left: 1px solid rgba(0, 255, 153, 0.1);
+}
+
+/* The draggable part (thumb) */
+#listPanel::-webkit-scrollbar-thumb {
+  background: #00ff99;
+  box-shadow: 0 0 10px #00ff99;
+  border-radius: 2px;
+}
+
+/* Hover effect for the thumb */
+#listPanel::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+  box-shadow: 0 0 15px #00ff99;
+}
+
+/* Firefox Support */
+#listPanel {
+  scrollbar-width: thin;
+  scrollbar-color: #00ff99 rgba(0, 255, 153, 0.05);
+  #listPanel {
+    /* ... your existing code ... */
+    overflow-y: auto; 
+    overflow-x: hidden; /* Prevent horizontal shifting */
+    padding-right: 8px; /* Add space so the list doesn't touch the scrollbar */
+}
+}
